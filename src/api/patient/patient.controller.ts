@@ -55,7 +55,7 @@ export class PatientController {
     @Body() updatePatientDto: UpdatePatientDto,
     @Req() req: Request,
   ) {
-    return this.patientService.updatePatient(id, updatePatientDto, req);
+    return this.patientService.updatePatient(id, updatePatientDto);
   }
 
   @Delete(':id')

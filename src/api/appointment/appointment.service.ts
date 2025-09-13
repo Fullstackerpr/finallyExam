@@ -21,8 +21,10 @@ export class AppointmentService {
     try {
       const { schedule_at } = createAppointmentDto;
 
+      const scheduleDate = new Date(schedule_at);
+
       const schedule = await this.appointmentRepo.findOne({
-        where: { schedule_at },
+        where: { schedule_at: scheduleDate },
       });
 
       if (schedule) {
@@ -31,7 +33,10 @@ export class AppointmentService {
         );
       }
 
-      const appointment = this.appointmentRepo.create(createAppointmentDto);
+      const appointment = this.appointmentRepo.create({
+        ...createAppointmentDto,
+        schedule_at: scheduleDate,
+      });
       await this.appointmentRepo.save(appointment);
 
       return successRes(appointment, 201);
@@ -67,12 +72,33 @@ export class AppointmentService {
     updateAppoinmentDto: UpdateAppointmentDto,
   ) {
     try {
+      const { schedule_at } = updateAppoinmentDto;
+
+      let scheduleDate: Date | undefined;
+      if (schedule_at) {
+        scheduleDate = new Date(schedule_at);
+
+        const existsSchedule = await this.appointmentRepo.findOne({
+          where: { schedule_at: scheduleDate },
+        });
+
+        if (existsSchedule && existsSchedule.id !== id) {
+          throw new ConflictException(
+            `Schedule at ${schedule_at} already exists`,
+          );
+        }
+      }
+
       const appointment = await this.appointmentRepo.findOne({ where: { id } });
       if (!appointment) {
         throw new NotFoundException('Appointment not found!');
       }
 
-      await this.appointmentRepo.update(id, updateAppoinmentDto);
+      await this.appointmentRepo.update(id, {
+        ...updateAppoinmentDto,
+        ...(scheduleDate ? { schedule_at: scheduleDate } : {}),
+      });
+
       const updatedAppoinment = await this.appointmentRepo.findOne({
         where: { id },
       });
@@ -91,7 +117,7 @@ export class AppointmentService {
       }
 
       await this.appointmentRepo.delete({ id });
-      return successRes({})
+      return successRes({});
     } catch (error) {
       return catchError(error);
     }

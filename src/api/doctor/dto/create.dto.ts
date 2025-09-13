@@ -3,7 +3,6 @@ import {
   IsEnum,
   IsNotEmpty,
   IsString,
-  IsDateString,
 } from 'class-validator';
 import { Gender, Roles } from 'src/common/enums';
 
@@ -21,8 +20,7 @@ export class CreateDoctorDto {
   phone_number: string;
 
   @IsNotEmpty()
-  @IsDateString()
-  birthday: Date;
+  birthday: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -30,7 +28,7 @@ export class CreateDoctorDto {
 
   @IsNotEmpty()
   @IsString()
-  password: string
+  password: string;
 
   @IsNotEmpty()
   @IsEnum(Gender)
@@ -44,4 +42,3 @@ export class CreateDoctorDto {
   @IsEnum(Roles)
   role: Roles;
 }
-

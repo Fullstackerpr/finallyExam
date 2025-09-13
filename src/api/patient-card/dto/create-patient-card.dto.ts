@@ -1,9 +1,8 @@
 import {
-  IsEmail,
   IsEnum,
   IsNotEmpty,
   IsString,
-  IsDateString,
+  IsNumber,
 } from 'class-validator';
 import { Status } from 'src/common/enums';
 
@@ -17,14 +16,13 @@ export class CreatePatientCardDto {
   card_number: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   expire_month: number;
 
   @IsNotEmpty()
-  @IsDateString()
+  @IsNumber()
   expire_year: number;
 
-  @IsEmail()
   @IsEnum(Status)
   status: Status;
 }

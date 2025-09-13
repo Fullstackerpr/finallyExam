@@ -13,7 +13,7 @@ export class AppointmentEntity extends BaseEntity {
     @Column({type: 'varchar'})
     appointment_type: string
 
-    @Column({type: 'timestamp', unique: true})
+    @Column({type: 'date', unique: true})
     schedule_at: Date
 
     @Column({type: 'enum', enum: State, default: State.PENDING})

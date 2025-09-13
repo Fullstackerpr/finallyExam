@@ -14,13 +14,27 @@ import { MedicalRecordRepository } from 'src/core/repository/medical-record.repo
 export class MedicalRecordsService {
   constructor(
     @InjectRepository(MedicalRecordEntity)
-    private readonly medicalRecordRepo: MedicalRecordRepository
+    private readonly medicalRecordRepo: MedicalRecordRepository,
   ) {}
 
   async createMedicalRecord(createDto: CreateMedicalRecordDto) {
     try {
       // const exist = await this.medicalRecordRepo.findOne({ where: { appointment_id: createDto.appointment_id } });
       // if (exist) throw new ConflictException('Medical record already exists for this appointment');
+
+      const { start_at } = createDto;
+
+      if (start_at) {
+        const exist = await this.medicalRecordRepo.findOne({
+          where: { start_at: new Date(start_at) },
+        });
+
+        if (exist) {
+          throw new ConflictException(
+            `Medical record already exists for started_at ${start_at}`,
+          );
+        }
+      }
 
       const medicalRecord = this.medicalRecordRepo.create(createDto);
       await this.medicalRecordRepo.save(medicalRecord);
@@ -59,8 +73,25 @@ export class MedicalRecordsService {
         throw new NotFoundException('Medical Record not found!');
       }
 
+      if (updateDto.start_at) {
+        const startDate = new Date(updateDto.start_at);
+
+        const exists = await this.medicalRecordRepo.findOne({
+          where: { start_at: startDate },
+        });
+
+        if (exists && exists.id !== id) {
+          throw new ConflictException(
+            `Medical record already exists for start_at: ${updateDto.start_at}`,
+          );
+        }
+      }
+
       await this.medicalRecordRepo.update(id, updateDto);
-      const updatedRecord = await this.medicalRecordRepo.findOne({ where: { id } });
+
+      const updatedRecord = await this.medicalRecordRepo.findOne({
+        where: { id },
+      });
 
       return successRes(updatedRecord);
     } catch (error) {

@@ -5,7 +5,7 @@ import { Column, Entity } from 'typeorm';
 @Entity()
 export class PatientCardEntity extends BaseEntity {
   //   @Column({ type: 'string' })
-  //   patient_id: string;
+  //   doctor_id: string;
 
   @Column({ type: 'varchar' })
   card_type: string;

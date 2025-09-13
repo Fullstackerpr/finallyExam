@@ -21,8 +21,7 @@ export class RegisterDoctorDto {
   phone_number: string;
 
   @IsNotEmpty()
-  @IsDateString()
-  birthday: Date;
+  birthday: string;
 
   @IsNotEmpty()
   @IsEmail()

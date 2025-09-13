@@ -19,7 +19,7 @@ export class PatientEntity extends BaseEntity {
   @Column({type: 'varchar'})
   password: string
   
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'date' })
   birthday: Date;
 
   @Column({ type: 'enum', enum: Gender })

@@ -55,7 +55,7 @@ export class DoctorController {
     @Body() updateDoctorDto: UpdateDoctorDto,
     @Req() req: Request,
   ) {
-    return this.doctorService.updateDoctor(id, updateDoctorDto, req);
+    return this.doctorService.updateDoctor(id, updateDoctorDto);
   }
 
   @Delete(':id')

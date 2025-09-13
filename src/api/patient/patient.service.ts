@@ -112,7 +112,7 @@ export class PatientService {
       }
 
       const payload = { id: patient.id, role: patient.role };
-      const token = await this.token.generateTokens(payload); 
+      const token = await this.token.generateTokens(payload);
 
       return { message: 'successfully', ...token };
     } catch (error) {
@@ -151,32 +151,37 @@ export class PatientService {
     }
   }
 
-  async updatePatient(
-    id: string,
-    updatePatientDto: UpdatePatientDto,
-    req: Request,
-  ) {
+  async updatePatient(id: string, updatepatientDto: UpdatePatientDto) {
     try {
+      const { email, phone_number } = updatepatientDto;
+
       const patient = await this.patientRepo.findOne({ where: { id } });
       if (!patient) {
         throw new NotFoundException('Patient not found');
       }
 
-      const currentPatient = req['patient'];
-
-      if (currentPatient.role === Roles.PATIENT) {
-        if (currentPatient.id !== id) {
-          throw new ForbiddenException("Siz faqat ozingizni o'zgarita olasiz");
-        }
-
-        if (updatePatientDto.role || updatePatientDto['status']) {
-          throw new ForbiddenException(
-            'Siz role yoki statusni ozgartira olmaysiz',
-          );
-        }
+      const existEmail = await this.patientRepo.findOne({ where: { email } });
+      if (existEmail) {
+        throw new ConflictException('Email already exists');
       }
 
-      await this.patientRepo.update(id, updatePatientDto);
+      const existPhoneNumber = await this.patientRepo.findOne({
+        where: { phone_number },
+      });
+      if (existPhoneNumber) {
+        throw new ConflictException('Phone Number already exists');
+      }
+
+      if (updatepatientDto.role) {
+        throw new ForbiddenException('Siz role ni ozgartira olmaysiz');
+      }
+
+      if(updatepatientDto.gender) {
+        throw new ForbiddenException('Siz genderni ozgartira olmaysiz')
+      }
+
+      await this.patientRepo.update(id, updatepatientDto);
+
       const updatedPatient = await this.patientRepo.findOne({ where: { id } });
       return successRes(updatedPatient);
     } catch (error) {

@@ -55,10 +55,6 @@ export class AdminService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-    if (currentAdmin.role !== Roles.SUPERADMIN) {
-      throw new BadRequestException('Only SuperAdmin can create new admins');
-    }
-
     try {
       const { full_name, username, password, phone_number, status } =
         createAdminDto;

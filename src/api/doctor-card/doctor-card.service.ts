@@ -62,9 +62,19 @@ export class DoctorCardService {
 
   async updateDoctorCard(id: string, updateDoctorCardDto: UpdateDoctorCardDto) {
     try {
+      const { card_number } = updateDoctorCardDto;
+
       const doctorCard = await this.doctorcardRepo.findOne({ where: { id } });
       if (!doctorCard) {
         throw new NotFoundException('Doctor Card not found!');
+      }
+
+      const existsCardNum = await this.doctorcardRepo.findOne({
+        where: { card_number },
+      });
+
+      if(existsCardNum) {
+        throw new ConflictException('Card Number already exists')
       }
 
       await this.doctorcardRepo.update(id, updateDoctorCardDto);

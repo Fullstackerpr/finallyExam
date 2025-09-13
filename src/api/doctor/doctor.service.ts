@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Req,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -161,32 +162,37 @@ export class DoctorService {
     }
   }
 
-  async updateDoctor(
-    id: string,
-    updateDoctorDto: UpdateDoctorDto,
-    req: Request,
-  ) {
+  async updateDoctor(id: string, updateDoctorDto: UpdateDoctorDto) {
     try {
+      const { email, phone_number } = updateDoctorDto;
+
       const doctor = await this.doctorRepo.findOne({ where: { id } });
       if (!doctor) {
         throw new NotFoundException('Doctor not found');
       }
 
-      const currentDoctor = req['doctor'];
+      const existEmail = await this.doctorRepo.findOne({ where: { email } });
+      if (existEmail) {
+        throw new ConflictException('Email already exists');
+      }
 
-      if (currentDoctor.role === Roles.DOCTOR) {
-        if (currentDoctor.id !== id) {
-          throw new ForbiddenException("Siz faqat ozingizni o'zgarita olasiz");
-        }
+      const existPhoneNumber = await this.doctorRepo.findOne({
+        where: { phone_number },
+      });
+      if (existPhoneNumber) {
+        throw new ConflictException('Phone Number already exists');
+      }
 
-        if (updateDoctorDto.role || updateDoctorDto['status']) {
-          throw new ForbiddenException(
-            'Siz role yoki statusni ozgartira olmaysiz',
-          );
-        }
+      if (updateDoctorDto.role) {
+        throw new ForbiddenException('Siz role ni ozgartira olmaysiz');
+      }
+
+      if (updateDoctorDto.gender) {
+        throw new ForbiddenException('Siz genderni ozgartira olmaysiz');
       }
 
       await this.doctorRepo.update(id, updateDoctorDto);
+
       const updatedDoctor = await this.doctorRepo.findOne({ where: { id } });
       return successRes(updatedDoctor);
     } catch (error) {

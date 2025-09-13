@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, IsDateString } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsDateString, IsNotEmpty } from 'class-validator';
 import { StatusMedic } from 'src/common/enums';
 
 export class CreateMedicalRecordDto {
@@ -17,12 +17,11 @@ export class CreateMedicalRecordDto {
   @IsString()
   treatment: string;
 
-  @IsDateString()
-  start_at: Date;
+  @IsNotEmpty()
+  start_at: string;
 
-  @IsDateString()
   @IsOptional()
-  finished_at?: Date;
+  finished_at?: string;
 
   @IsEnum(StatusMedic)
   status: StatusMedic;

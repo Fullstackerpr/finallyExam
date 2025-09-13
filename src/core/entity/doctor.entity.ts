@@ -13,7 +13,7 @@ export class DoctorEntity extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   phone_number: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'date' })
   birthday: Date;
   
   @Column({ type: 'varchar', unique: true })

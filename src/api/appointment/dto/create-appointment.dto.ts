@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsDateString,
 } from 'class-validator';
 import { State } from 'src/common/enums';
 
@@ -12,9 +11,8 @@ export class CreateAppointmentDto {
   @IsNotEmpty()
   appointment_type: string;
 
-  @IsDateString()
   @IsNotEmpty()
-  schedule_at: Date; 
+  schedule_at: string; 
 
   @IsEnum(State)
   @IsOptional()

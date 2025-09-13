@@ -29,10 +29,10 @@ export class MedicalRecordEntity extends BaseEntity {
     @Column({type: 'varchar'})
     treatment: string
 
-    @Column({type: 'timestamp'})
+    @Column({type: 'date'})
     start_at: Date
 
-    @Column({type: 'timestamp'})
+    @Column({type: 'date'})
     finished_at: Date
 
     @Column({type: 'enum', enum: StatusMedic})

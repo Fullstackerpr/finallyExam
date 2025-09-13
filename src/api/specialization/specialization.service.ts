@@ -56,20 +56,16 @@ export class SpecializationService {
 
   async update(updateSpecializationDto: UpdateSpecializationDto, id: string) {
     try {
+      const { name } = updateSpecializationDto;
+
       const special = await this.specialRepo.findOne({ where: { id } });
       if (!special) {
         throw new NotFoundException('Specail is not found!');
       }
 
-      if (updateSpecializationDto.name) {
-        const exists = await this.specialRepo.findOne({
-          where: { name: updateSpecializationDto.name },
-        });
-        if (exists && exists.id !== id) {
-          throw new ConflictException(
-            `Specialization: ${updateSpecializationDto.name} already exists`,
-          );
-        }
+      const specialName = await this.specialRepo.findOne({ where: { name } });
+      if (specialName) {
+        throw new ConflictException(`Specialization: ${name} already exists`);
       }
 
       await this.specialRepo.update(id, updateSpecializationDto);
