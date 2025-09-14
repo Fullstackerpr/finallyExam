@@ -1,9 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { State } from 'src/common/enums';
 
 export class CreateAppointmentDto {
@@ -12,9 +7,9 @@ export class CreateAppointmentDto {
   appointment_type: string;
 
   @IsNotEmpty()
-  schedule_at: string; 
+  schedule_at: string;
 
   @IsEnum(State)
   @IsOptional()
-  state: State; 
+  state: State;
 }

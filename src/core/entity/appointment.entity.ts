@@ -1,21 +1,30 @@
 import { BaseEntity } from 'src/common/database/BaseEntity';
 import { State } from 'src/common/enums';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { PatientEntity } from './patient.entity';
+import { DoctorEntity } from './doctor.entity';
+import { MedicalRecordEntity } from './medical-records';
 
-@Entity()
+@Entity('appointment')
 export class AppointmentEntity extends BaseEntity {
-//   @Column({ type: 'varchar' })
-//   patient_id: string;
+  @Column({ type: 'varchar' })
+  appointment_type: string;
 
-//   @Column({ type: 'varchar' })
-//   doctor_id: string;
+  @Column({ type: 'date' })
+  scheduled_at: Date;
 
-    @Column({type: 'varchar'})
-    appointment_type: string
+  @Column({ type: 'enum', enum: State, default: State.PENDING })
+  state: State;
 
-    @Column({type: 'date', unique: true})
-    schedule_at: Date
+  @ManyToOne(() => PatientEntity, (patient) => patient.appointments)
+  patient: PatientEntity;
 
-    @Column({type: 'enum', enum: State, default: State.PENDING})
-    state: State
+  @ManyToOne(() => DoctorEntity, (doctor) => doctor.appointments)
+  doctor: DoctorEntity;
+
+  @OneToMany(
+    () => MedicalRecordEntity,
+    (medicalRecord) => medicalRecord.appointment,
+  )
+  medical_records: MedicalRecordEntity[];
 }

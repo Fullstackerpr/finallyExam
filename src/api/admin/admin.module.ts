@@ -8,10 +8,7 @@ import { BcryptEncryption } from 'src/infrastructure/bcrypt';
 import { Token } from 'src/infrastructure/generate-token';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([AdminEntity]),
-    JwtModule.register({}),
-  ],
+  imports: [TypeOrmModule.forFeature([AdminEntity]), JwtModule.register({})],
   controllers: [AdminController],
   providers: [AdminService, BcryptEncryption, Token],
 })

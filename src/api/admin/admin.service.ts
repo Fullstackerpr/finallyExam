@@ -151,7 +151,7 @@ export class AdminService {
       if (!admin) {
         throw new NotFoundException('Admin not found');
       }
-      return successRes(admin)
+      return successRes(admin);
     } catch (error) {
       return catchError(error);
     }

@@ -6,87 +6,80 @@
 //   Patch,
 //   Param,
 //   Delete,
+//   UseGuards,
 //   UseInterceptors,
 //   UploadedFiles,
-//   Req,
-//   UseGuards,
+//   BadRequestException,
 // } from '@nestjs/common';
-// import { DoctorFileService } from './doctor_file.service';
-// import { FileFieldsInterceptor } from '@nestjs/platform-express';
-// import { FileValidation } from 'src/common/pipe/file_validation.pipe';
-// import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-// import { AuthGuard } from 'src/common/Guard/auth.guard';
-// import { RoleGuard } from 'src/common/Guard/role.guard';
-// import { Roles } from 'src/common/Decorator/Role.decorator';
-// import { ERols } from 'src/common/enum';
-// import { Request } from 'express';
-// import { ParseIdPipe } from 'src/common/pipe/params.validate.pipe';
+// import { FilesInterceptor } from '@nestjs/platform-express';
+// import { DoctorDocumentsService } from './doctor-documents.service';
+// import { CreateDoctorDocumentDto } from './dto/create-doctor-document.dto';
+// import { UpdateDoctorDocumentDto } from './dto/update-doctor-document.dto';
+// import { JwtGuard } from 'src/common/guards/jwt.auth.guard';
+// import { AdminGuard } from 'src/common/guards/admin.guard';
 
-// @Controller('doctor-file')
-// export class DoctorFileController {
-//   constructor(private readonly doctorFileService: DoctorFileService) {}
+// @Controller('doctor-documents')
+// @UseGuards(JwtGuard, AdminGuard)
+// export class DoctorDocumentsController {
+//   constructor(private readonly doctorDocumentsService: DoctorDocumentsService) {}
 
-//   @ApiConsumes('multipart/form-data')
-//   @ApiBody({
-//     schema: {
-//       type: 'object',
-//       properties: {
-//         passport_file: { type: 'string', format: 'binary' },
-//         diplom_file: { type: 'string', format: 'binary' },
-//         yatt_file: { type: 'string', format: 'binary' },
-//         sertifikat_file: { type: 'string', format: 'binary' },
-//         tibiy_varaqa_file: { type: 'string', format: 'binary' },
-//       },
+//   @Post('upload/:doctorId')
+//   @UseInterceptors(FilesInterceptor('files', 5, {
+//     limits: {
+//       fileSize: 10 * 1024 * 1024, // 10MB per file
 //     },
-//   })
-//   @Patch('update')
-//   @UseInterceptors(
-//     FileFieldsInterceptor(
-//       [
-//         { name: 'passport_file', maxCount: 1 },
-//         { name: 'diplom_file', maxCount: 1 },
-//         { name: 'yatt_file', maxCount: 1 },
-//         { name: 'sertifikat_file', maxCount: 1 },
-//         { name: 'tibiy_varaqa_file', maxCount: 1 },
-//       ],
-//       { limits: { fieldSize: 2 * 1024 * 1024 } },
-//     ),
-//   )
-//   @UseGuards(AuthGuard, RoleGuard)
-//   @Roles(ERols.DOCTOR)
-//   create(
-//     @Req() req: Request,
-//     @UploadedFiles()
-//     files: {
-//       passport_file?: Express.Multer.File[];
-//       diplom_file?: Express.Multer.File[];
-//       yatt_file?: Express.Multer.File[];
-//       sertifikat_file?: Express.Multer.File[];
-//       tibiy_varaqa_file?: Express.Multer.File[];
+//     fileFilter: (req, file, callback) => {
+//       // Allow only specific file types
+//       const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'image/jpg'];
+//       if (allowedTypes.includes(file.mimetype)) {
+//         callback(null, true);
+//       } else {
+//         callback(new BadRequestException('Only JPEG, PNG, JPG and PDF files are allowed'), false);
+//       }
 //     },
+//   }))
+//   async uploadDocuments(
+//     @Param('doctorId') doctorId: string,
+//     @UploadedFiles() files: Express.Multer.File[],
+//     @Body('types') types: string | string[],
 //   ) {
-//     const validatedFiles = new FileValidation().transform(files);
-//     return this.doctorFileService.create(validatedFiles, req);
+//     // Handle types as string or array
+//     let typesArray: string[];
+//     if (typeof types === 'string') {
+//       try {
+//         typesArray = JSON.parse(types);
+//       } catch {
+//         typesArray = [types];
+//       }
+//     } else {
+//       typesArray = types || [];
+//     }
+
+//     return this.doctorDocumentsService.uploadDocuments(doctorId, files, typesArray);
 //   }
 
-//   @UseGuards(AuthGuard, RoleGuard)
-//   @Roles(ERols.ADMIN, ERols.SUPPER_ADMIN, ERols.DOCTOR)
 //   @Get()
-//   findAll(@Req() req: Request) {
-//     return this.doctorFileService.findAll(req);
+//   findAll() {
+//     return this.doctorDocumentsService.findAll();
 //   }
 
-//   @UseGuards(AuthGuard, RoleGuard)
-//   @Roles(ERols.ADMIN, ERols.SUPPER_ADMIN, ERols.DOCTOR)
+//   @Get('doctor/:doctorId')
+//   findByDoctorId(@Param('doctorId') doctorId: string) {
+//     return this.doctorDocumentsService.findByDoctorId(doctorId);
+//   }
+
 //   @Get(':id')
-//   findOne(@Param('id', ParseIdPipe) id: string, @Req() req: Request) {
-//     return this.doctorFileService.findOne(+id, req);
+//   findOne(@Param('id') id: string) {
+//     return this.doctorDocumentsService.findOne(id);
 //   }
 
-//   @UseGuards(AuthGuard, RoleGuard)
-//   @Roles(ERols.ADMIN, ERols.SUPPER_ADMIN, ERols.DOCTOR)
+//   @Patch(':id')
+//   update(@Param('id') id: string, @Body() updateDoctorDocumentDto: UpdateDoctorDocumentDto) {
+//     return this.doctorDocumentsService.update(id, updateDoctorDocumentDto);
+//   }
+
 //   @Delete(':id')
-//   remove(@Param('id', ParseIdPipe) id: string, @Req() req: Request) {
-//     return this.doctorFileService.remove(+id, req);
+//   remove(@Param('id') id: string) {
+//     return this.doctorDocumentsService.remove(id);
 //   }
 // }

@@ -176,8 +176,8 @@ export class PatientService {
         throw new ForbiddenException('Siz role ni ozgartira olmaysiz');
       }
 
-      if(updatepatientDto.gender) {
-        throw new ForbiddenException('Siz genderni ozgartira olmaysiz')
+      if (updatepatientDto.gender) {
+        throw new ForbiddenException('Siz genderni ozgartira olmaysiz');
       }
 
       await this.patientRepo.update(id, updatepatientDto);

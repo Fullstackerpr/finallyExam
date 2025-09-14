@@ -73,8 +73,8 @@ export class DoctorCardService {
         where: { card_number },
       });
 
-      if(existsCardNum) {
-        throw new ConflictException('Card Number already exists')
+      if (existsCardNum) {
+        throw new ConflictException('Card Number already exists');
       }
 
       await this.doctorcardRepo.update(id, updateDoctorCardDto);

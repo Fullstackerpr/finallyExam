@@ -2,7 +2,7 @@ import { BaseEntity } from 'src/common/database/BaseEntity';
 import { Roles, Status } from 'src/common/enums';
 import { Column, Entity } from 'typeorm';
 
-@Entity()
+@Entity('admin')
 export class AdminEntity extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   username: string;

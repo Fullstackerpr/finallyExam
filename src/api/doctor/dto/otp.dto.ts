@@ -7,5 +7,5 @@ export class OtpDto {
 
   @IsNumber()
   @IsNotEmpty()
-  otp: number
+  otp: number;
 }

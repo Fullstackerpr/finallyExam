@@ -10,6 +10,12 @@ import { PatientCardModule } from './patient-card/patient-card.module';
 import { MedicalRecordsModule } from './medical-records/medical-records.module';
 import { SpecializationModule } from './specialization/specialization.module';
 import { RatingModule } from './rating/rating.module';
+import { DoctorWalletModule } from './doctor-wallet/doctor-wallet.module';
+import { ServiceModule } from './service/service.module';
+import { ServiceTypeModule } from './service-type/service-type.module';
+import { DoctorScheduleModule } from './doctor-schedule/doctor-schedule.module';
+import { DoctorSpecialyModule } from './doctor-specialy/doctor-specialy.module';
+import { ReferralSpecialistModule } from './referral-specialist/referral-specialist.module';
 
 @Module({
   imports: [
@@ -18,17 +24,23 @@ import { RatingModule } from './rating/rating.module';
       url: config.DB_URL,
       entities: ['dist/core/entity/*.entity{.ts, .js}'],
       synchronize: true,
-      autoLoadEntities: true
+      autoLoadEntities: true,
     }),
-    DoctorModule,
     AdminModule,
-    PatientModule,
-    AppointmentModule,
+    DoctorModule,
     DoctorCardModule,
+    DoctorWalletModule,
+    DoctorScheduleModule,
+    DoctorSpecialyModule,
+    PatientModule,
     PatientCardModule,
+    AppointmentModule,
     MedicalRecordsModule,
     RatingModule,
-    SpecializationModule
-  ]
+    ReferralSpecialistModule,
+    SpecializationModule,
+    ServiceModule,
+    ServiceTypeModule
+  ],
 })
 export class AppModule {}

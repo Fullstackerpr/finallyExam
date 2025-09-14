@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { SpecializationService } from './specialization.service';
 import { SpecializationController } from './specialization.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SpecailizationEntity } from 'src/core/entity/specialization.entity';
+import { SpecializationEntity } from 'src/core/entity/specialization.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SpecailizationEntity])],
+  imports: [TypeOrmModule.forFeature([SpecializationEntity])],
   controllers: [SpecializationController],
   providers: [SpecializationService],
 })

@@ -18,6 +18,12 @@ import { MailService } from 'src/common/mail/mail.service';
     }),
   ],
   controllers: [PatientController],
-  providers: [PatientService, BcryptEncryption, Token, OtpGenerate, MailService],
+  providers: [
+    PatientService,
+    BcryptEncryption,
+    Token,
+    OtpGenerate,
+    MailService,
+  ],
 })
 export class PatientModule {}

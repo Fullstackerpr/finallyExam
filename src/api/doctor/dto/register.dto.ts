@@ -29,7 +29,7 @@ export class RegisterDoctorDto {
 
   @IsNotEmpty()
   @IsString()
-  password: string
+  password: string;
 
   @IsNotEmpty()
   @IsEnum(Gender)
@@ -47,4 +47,3 @@ export class RegisterDoctorDto {
   @IsEnum(Roles)
   role: Roles;
 }
-

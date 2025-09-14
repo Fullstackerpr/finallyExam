@@ -75,8 +75,8 @@ export class PatientCardService {
       const existsCardNum = await this.patientcardRepo.findOne({
         where: { card_number },
       });
-      if(existsCardNum) {
-        throw new ConflictException('Card Number already exists')
+      if (existsCardNum) {
+        throw new ConflictException('Card Number already exists');
       }
 
       await this.patientcardRepo.update(id, updatePatientCardDto);

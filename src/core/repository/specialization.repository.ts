@@ -1,5 +1,4 @@
-import { Repository } from "typeorm";
-import { SpecailizationEntity } from "../entity/specialization.entity";
+import { Repository } from 'typeorm';
+import { SpecializationEntity } from '../entity/specialization.entity';
 
-
-export type SpecailizationRepository = Repository<SpecailizationEntity>
+export type SpecailizationRepository = Repository<SpecializationEntity>;

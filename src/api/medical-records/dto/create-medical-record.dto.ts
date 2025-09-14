@@ -1,4 +1,10 @@
-import { IsString, IsEnum, IsOptional, IsDateString, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsDateString,
+  IsNotEmpty,
+} from 'class-validator';
 import { StatusMedic } from 'src/common/enums';
 
 export class CreateMedicalRecordDto {

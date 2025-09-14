@@ -1,8 +1,12 @@
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/common/database/BaseEntity';
-import { Column, Entity } from 'typeorm';
+import { DoctorSpecialyEntity } from './doctor-specilay.entity';
 
-@Entity()
-export class SpecailizationEntity extends BaseEntity {
-  @Column({ type: 'varchar'})
+@Entity('specialization')
+export class SpecializationEntity extends BaseEntity {
+  @Column({ type: 'varchar' })
   name: string;
+
+  @OneToMany(() => DoctorSpecialyEntity, (docSpec) => docSpec.specialization)
+  specialized_doctors: DoctorSpecialyEntity[];
 }

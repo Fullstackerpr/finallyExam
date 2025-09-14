@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MedicalRecordsService } from './medical-records.service';
 import { CreateMedicalRecordDto } from './dto/create-medical-record.dto';
 import { UpdateMedicalRecordDto } from './dto/update-medical-record.dto';
@@ -9,7 +17,9 @@ export class MedicalRecordsController {
 
   @Post()
   create(@Body() createMedicalRecordDto: CreateMedicalRecordDto) {
-    return this.medicalRecordsService.createMedicalRecord(createMedicalRecordDto);
+    return this.medicalRecordsService.createMedicalRecord(
+      createMedicalRecordDto,
+    );
   }
 
   @Get()
@@ -23,8 +33,14 @@ export class MedicalRecordsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMedicalRecordDto: UpdateMedicalRecordDto) {
-    return this.medicalRecordsService.updateMedicalRecord(id, updateMedicalRecordDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateMedicalRecordDto: UpdateMedicalRecordDto,
+  ) {
+    return this.medicalRecordsService.updateMedicalRecord(
+      id,
+      updateMedicalRecordDto,
+    );
   }
 
   @Delete(':id')

@@ -1,40 +1,45 @@
-import { BaseEntity } from "src/common/database/BaseEntity";
-import { StatusMedic } from "src/common/enums";
-import { Column, Entity } from "typeorm";
+import { BaseEntity } from 'src/common/database/BaseEntity';
+import { StatusMedic } from 'src/common/enums';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { AppointmentEntity } from './appointment.entity';
+import { PatientEntity } from './patient.entity';
+import { DoctorEntity } from './doctor.entity';
 
-
-@Entity()
+@Entity('medical-record')
 export class MedicalRecordEntity extends BaseEntity {
-    // @Column({type: 'varchar'})
-    // appointment_id: string
+  @Column({ type: 'varchar' })
+  complaint: string;
 
-    // @Column({type: 'varchar'})
-    // patient_id: string
+  @Column({ type: 'varchar' })
+  anamnesis: string;
 
-    // @Column({type: 'varchar'})
-    // doctor_id: string
+  @Column({ type: 'varchar' })
+  medical_check: string;
 
-    @Column({type: 'varchar'})
-    complaint: string
+  @Column({ type: 'varchar' })
+  diagnosis: string;
 
-    @Column({type: 'varchar'})
-    anamnesis: string
+  @Column({ type: 'varchar' })
+  treatment: string;
 
-    @Column({type: 'varchar'})
-    medical_check: string
+  @Column({ type: 'date' })
+  start_at: Date;
 
-    @Column({type: 'varchar'})
-    diagnosis: string
+  @Column({ type: 'date' })
+  finished_at: Date;
 
-    @Column({type: 'varchar'})
-    treatment: string
+  @Column({ type: 'enum', enum: StatusMedic })
+  status: StatusMedic;
 
-    @Column({type: 'date'})
-    start_at: Date
+  @ManyToOne(
+    () => AppointmentEntity,
+    (appointment) => appointment.medical_records,
+  )
+  appointment: AppointmentEntity;
 
-    @Column({type: 'date'})
-    finished_at: Date
+  @ManyToOne(() => PatientEntity, (patient) => patient.medical_records)
+  patient: PatientEntity;
 
-    @Column({type: 'enum', enum: StatusMedic})
-    status: StatusMedic
+  @ManyToOne(() => DoctorEntity, (doctor) => doctor.medical_records)
+  doctor: DoctorEntity;
 }

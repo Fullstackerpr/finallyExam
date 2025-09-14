@@ -1,5 +1,4 @@
-import { Repository } from "typeorm";
-import { MedicalRecordEntity } from "../entity/medical-records";
+import { Repository } from 'typeorm';
+import { MedicalRecordEntity } from '../entity/medical-records';
 
-
-export type MedicalRecordRepository = Repository<MedicalRecordEntity>
+export type MedicalRecordRepository = Repository<MedicalRecordEntity>;

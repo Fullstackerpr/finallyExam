@@ -4,16 +4,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SpecailizationEntity } from 'src/core/entity/specialization.entity';
 import { SpecailizationRepository } from 'src/core/repository/specialization.repository';
 import { CreateSpecializationDto } from './dto/create-specialization.dto';
 import { catchError, successRes } from 'src/infrastructure/response';
 import { UpdateSpecializationDto } from './dto/update-specialization.dto';
+import { SpecializationEntity } from 'src/core/entity/specialization.entity';
 
 @Injectable()
 export class SpecializationService {
   constructor(
-    @InjectRepository(SpecailizationEntity)
+    @InjectRepository(SpecializationEntity)
     private readonly specialRepo: SpecailizationRepository,
   ) {}
 

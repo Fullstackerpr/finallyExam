@@ -133,7 +133,9 @@ export class DoctorService {
 
   async findAllDoctor() {
     try {
-      const data = await this.doctorRepo.find();
+      const data = await this.doctorRepo.find({
+        relations: ['wallet', 'schedules'],
+      });
       return successRes(data);
     } catch (error) {
       return catchError(error);
@@ -142,7 +144,10 @@ export class DoctorService {
 
   async findByIdDoctor(id: string) {
     try {
-      const doctor = await this.doctorRepo.findOne({ where: { id } });
+      const doctor = await this.doctorRepo.findOne({
+        where: { id },
+        relations: ['wallet', 'schedules'],
+      });
       if (!doctor) {
         throw new NotFoundException('Doctor not found');
       }
@@ -155,7 +160,10 @@ export class DoctorService {
   async profile(doctor: JwtPayload) {
     try {
       const { id } = doctor;
-      const profile = await this.doctorRepo.findOne({ where: { id } });
+      const profile = await this.doctorRepo.findOne({
+        where: { id },
+        relations: ['wallet', 'schedules'],
+      });
       return successRes(profile);
     } catch (error) {
       return catchError(error);
@@ -166,7 +174,10 @@ export class DoctorService {
     try {
       const { email, phone_number } = updateDoctorDto;
 
-      const doctor = await this.doctorRepo.findOne({ where: { id } });
+      const doctor = await this.doctorRepo.findOne({
+        where: { id },
+        relations: ['wallet', 'schedules'], // qo‘shildi
+      });
       if (!doctor) {
         throw new NotFoundException('Doctor not found');
       }
@@ -193,7 +204,10 @@ export class DoctorService {
 
       await this.doctorRepo.update(id, updateDoctorDto);
 
-      const updatedDoctor = await this.doctorRepo.findOne({ where: { id } });
+      const updatedDoctor = await this.doctorRepo.findOne({
+        where: { id },
+        relations: ['wallet', 'schedules'],
+      });
       return successRes(updatedDoctor);
     } catch (error) {
       return catchError(error);

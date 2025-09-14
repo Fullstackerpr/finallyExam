@@ -3,6 +3,8 @@ import {
   IsEnum,
   IsNotEmpty,
   IsString,
+  IsOptional,
+  IsArray,
 } from 'class-validator';
 import { Gender, Roles } from 'src/common/enums';
 
@@ -41,4 +43,13 @@ export class CreateDoctorDto {
   @IsNotEmpty()
   @IsEnum(Roles)
   role: Roles;
+
+  @IsOptional()
+  @IsString()
+  walletId?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  scheduleId?: string[];
 }

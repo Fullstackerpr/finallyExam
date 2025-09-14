@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DoctorWalletService } from './doctor-wallet.service';
 import { CreateDoctorWalletDto } from './dto/create-doctor-wallet.dto';
 import { UpdateDoctorWalletDto } from './dto/update-doctor-wallet.dto';
@@ -9,26 +17,29 @@ export class DoctorWalletController {
 
   @Post()
   create(@Body() createDoctorWalletDto: CreateDoctorWalletDto) {
-    return this.doctorWalletService.create(createDoctorWalletDto);
+    return this.doctorWalletService.createWallet(createDoctorWalletDto);
   }
 
   @Get()
   findAll() {
-    return this.doctorWalletService.findAll();
+    return this.doctorWalletService.findAllWallets();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.doctorWalletService.findOne(+id);
+    return this.doctorWalletService.findWalletByDoctor(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDoctorWalletDto: UpdateDoctorWalletDto) {
-    return this.doctorWalletService.update(+id, updateDoctorWalletDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateDoctorWalletDto: UpdateDoctorWalletDto,
+  ) {
+    return this.doctorWalletService.updateWallet(id, updateDoctorWalletDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.doctorWalletService.remove(+id);
+    return this.doctorWalletService.deleteWallet(id);
   }
 }

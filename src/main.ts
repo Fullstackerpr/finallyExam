@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = Number(process.env.PORT) || 4040;
   const app = await NestFactory.create(AppModule, {
     logger: ['debug', 'error', 'warn'],
   });
@@ -13,9 +13,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-      transform: true, 
+      transform: true,
       transformOptions: {
-        enableImplicitConversion: true, 
+        enableImplicitConversion: true,
       },
     }),
   );
@@ -36,14 +36,14 @@ async function bootstrap() {
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory, {
+  SwaggerModule.setup('medi/api', app, documentFactory, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
 
   await app.listen(PORT, () =>
-    console.log(`🚀 Server running on port ${PORT}`),
+    console.log(`Server running on port`, PORT),
   );
 }
 bootstrap();

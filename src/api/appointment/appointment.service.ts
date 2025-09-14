@@ -24,7 +24,7 @@ export class AppointmentService {
       const scheduleDate = new Date(schedule_at);
 
       const schedule = await this.appointmentRepo.findOne({
-        where: { schedule_at: scheduleDate },
+        where: { scheduled_at: scheduleDate },
       });
 
       if (schedule) {
@@ -35,7 +35,7 @@ export class AppointmentService {
 
       const appointment = this.appointmentRepo.create({
         ...createAppointmentDto,
-        schedule_at: scheduleDate,
+        scheduled_at: scheduleDate,
       });
       await this.appointmentRepo.save(appointment);
 
@@ -79,7 +79,7 @@ export class AppointmentService {
         scheduleDate = new Date(schedule_at);
 
         const existsSchedule = await this.appointmentRepo.findOne({
-          where: { schedule_at: scheduleDate },
+          where: { scheduled_at: scheduleDate },
         });
 
         if (existsSchedule && existsSchedule.id !== id) {

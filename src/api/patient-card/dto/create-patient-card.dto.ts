@@ -1,9 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsNumber } from 'class-validator';
 import { Status } from 'src/common/enums';
 
 export class CreatePatientCardDto {

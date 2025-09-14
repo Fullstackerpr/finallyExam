@@ -1,6 +1,14 @@
 import { BaseEntity } from 'src/common/database/BaseEntity';
 import { Gender, Roles } from 'src/common/enums';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { DoctorWalletEntity } from './doctor-wallet.entity';
+import { DoctorScheduleEntity } from './doctor-schedule';
+import { ReferralSpecialistEntity } from './referal-specil.entity';
+import { AppointmentEntity } from './appointment.entity';
+import { MedicalRecordEntity } from './medical-records';
+import { RatingEntity } from './rating.entity';
+import { DoctorCardEntity } from './doctor-card.entity';
+import { DoctorSpecialyEntity } from './doctor-specilay.entity';
 
 @Entity('doctor')
 export class DoctorEntity extends BaseEntity {
@@ -15,12 +23,12 @@ export class DoctorEntity extends BaseEntity {
 
   @Column({ type: 'date' })
   birthday: Date;
-  
+
   @Column({ type: 'varchar', unique: true })
   email: string;
 
-  @Column({type: 'varchar'})
-  password: string
+  @Column({ type: 'varchar' })
+  password: string;
 
   @Column({ type: 'enum', enum: Gender })
   gender: Gender;
@@ -30,4 +38,33 @@ export class DoctorEntity extends BaseEntity {
 
   @Column({ type: 'enum', enum: Roles })
   role: Roles;
+
+  @OneToOne(() => DoctorWalletEntity, (wallet) => wallet.doctor, {
+    cascade: true,
+  })
+  @JoinColumn()
+  wallet: DoctorWalletEntity;
+
+  @OneToMany(() => DoctorScheduleEntity, (schedule) => schedule.doctor, {
+    cascade: true,
+  })
+  schedules: DoctorScheduleEntity[];
+
+  @OneToMany(() => ReferralSpecialistEntity, (ref) => ref.doctor)
+  referralSpecialistRecords: ReferralSpecialistEntity[];
+
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.doctor)
+  appointments: AppointmentEntity[];
+
+  @OneToMany(() => MedicalRecordEntity, (record) => record.doctor)
+  medical_records: MedicalRecordEntity[];
+
+  @OneToMany(() => RatingEntity, (rating) => rating.doctor)
+  ratings: RatingEntity[];
+
+  @OneToOne(() => DoctorCardEntity, (card) => card.doctor)
+  doctor_card: DoctorCardEntity;
+
+  @OneToMany(() => DoctorSpecialyEntity, (docSpec) => docSpec.doctor)
+  doctor_specializations: DoctorSpecialyEntity[];
 }
